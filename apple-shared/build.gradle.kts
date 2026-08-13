@@ -2,6 +2,7 @@ import co.touchlab.skie.configuration.DefaultArgumentInterop
 import dev.dimension.flare.buildlogic.FlarePlatform
 import dev.dimension.flare.buildlogic.flare
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
     id("dev.dimension.flare.multiplatform-library")
@@ -41,13 +42,6 @@ kotlin {
     listOf("iosArm64", "iosSimulatorArm64", "macosArm64")
         .map { targetName -> targets.getByName(targetName) as KotlinNativeTarget }
         .forEach { appleTarget ->
-            // Kotlin/Native 2.4.10 can exhaust the GitHub macOS runner heap in
-            // DevirtualizationAnalysis while linking the large Release framework.
-            // Disable that optimization phase; runtime availability and code generation remain intact.
-            appleTarget.compilerOptions {
-                freeCompilerArgs.add("-Xdisable-phases=DevirtualizationAnalysis")
-            }
-
             appleTarget.binaries.framework {
                 baseName = "KotlinSharedUI"
                 isStatic = true
@@ -100,6 +94,21 @@ kotlin {
             }
         }
     }
+}
+
+// Kotlin/Native 2.4.10 can exhaust the GitHub macOS runner heap in
+// DevirtualizationAnalysis while linking the large Release framework.
+// Kotlin 2.4 still exposes these link-task arguments through a deprecated API;
+// suppress only that migration diagnostic until the replacement task DSL is available.
+@Suppress("DEPRECATION", "DEPRECATION_ERROR")
+fun KotlinNativeLink.disableDevirtualizationAnalysis() {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xdisable-phases=DevirtualizationAnalysis"
+    }
+}
+
+tasks.withType<KotlinNativeLink>().configureEach {
+    disableDevirtualizationAnalysis()
 }
 
 skie {
