@@ -254,7 +254,7 @@ public extension Backport where Content: View {
     @ViewBuilder func presentationBackground(in shape: some ShapeStyle = Material.thin) -> some View {
         if #available(iOS 26.0, macOS 26, *) {
             content
-        } else if #available(macOS 13.3, *) {
+        } else if #available(iOS 16.4, macOS 13.3, *) {
             content.presentationBackground(shape)
         } else {
             content
@@ -446,19 +446,6 @@ public extension Backport where Content: View {
                 content.searchToolbarBehavior(.minimize)
 #endif
             }
-        } else {
-            content
-        }
-    }
-}
-
-@MainActor
-@available(iOS 14, macOS 12, *)
-public extension Backport where Content: ToolbarContent {
-    @ToolbarContentBuilder
-    func sharedToolBarBackgroundVisibility(_ visibility: Visibility) -> some ToolbarContent {
-        if #available(iOS 26.0, macOS 26, *) {
-            content.sharedBackgroundVisibility(visibility)
         } else {
             content
         }
