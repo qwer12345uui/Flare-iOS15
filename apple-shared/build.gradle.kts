@@ -41,6 +41,15 @@ kotlin {
     listOf("iosArm64", "iosSimulatorArm64", "macosArm64")
         .map { targetName -> targets.getByName(targetName) as KotlinNativeTarget }
         .forEach { appleTarget ->
+            // Kotlin/Native 2.4.10 can exhaust the GitHub macOS runner heap in
+            // DevirtualizationAnalysis while linking the large Release framework.
+            // Disable that optimization phase; runtime availability and code generation remain intact.
+            appleTarget.compilations.configureEach {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xdisable-phases=DevirtualizationAnalysis")
+                }
+            }
+
             appleTarget.binaries.framework {
                 baseName = "KotlinSharedUI"
                 isStatic = true
