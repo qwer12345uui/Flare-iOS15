@@ -26,8 +26,6 @@ concurrency:
 
 env:
   XCODE_VERSION: '26.0'
-  ARCHIVE_PATH: ${{ runner.temp }}/Flare-iOS15.xcarchive
-  BUILD_LOG: ${{ runner.temp }}/flare-ios15-build.log
 
 jobs:
   build-ios15:
@@ -104,6 +102,8 @@ jobs:
         working-directory: appleApp
         run: |
           set -o pipefail
+          ARCHIVE_PATH="$RUNNER_TEMP/Flare-iOS15.xcarchive"
+          BUILD_LOG="$RUNNER_TEMP/flare-ios15-build.log"
           xcodebuild archive \
             -project Flare.xcodeproj \
             -scheme iOS \
@@ -123,6 +123,7 @@ jobs:
         if: success()
         run: |
           set -euo pipefail
+          ARCHIVE_PATH="$RUNNER_TEMP/Flare-iOS15.xcarchive"
           APP_PATH="$(find "$ARCHIVE_PATH/Products/Applications" -maxdepth 1 -type d -name '*.app' -print -quit)"
           test -n "$APP_PATH"
           mkdir -p "$RUNNER_TEMP/ipa/Payload"
