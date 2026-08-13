@@ -53,6 +53,15 @@ jobs:
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}-
             ${{ runner.os }}-gradle-
 
+      - name: Restore Kotlin/Native toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.konan/dependencies
+          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}-
+            ${{ runner.os }}-konan-
+
       - name: Select Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
@@ -100,6 +109,10 @@ jobs:
 
       - name: Build unsigned iOS 15 archive
         working-directory: appleApp
+        env:
+          # Kotlin/Native links the shared framework during this step; the upstream 4 GB
+          # Gradle heap is insufficient for the OpenAI client IR on a clean runner.
+          GRADLE_JVM_ARGS: '-Xmx5g -Dfile.encoding=UTF-8'
         run: |
           set -o pipefail
           ARCHIVE_PATH="$RUNNER_TEMP/Flare-iOS15.xcarchive"

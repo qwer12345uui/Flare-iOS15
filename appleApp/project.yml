@@ -65,8 +65,7 @@ packages:
     url: https://github.com/wxxsw/GSPlayer
     from: 0.2.30
   iOS-Backports:
-    url: https://github.com/superwall/iOS-Backports
-    exactVersion: 1.0.5
+    path: Shared/SwiftUIBackports
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher.git
     exactVersion: 8.10.0
