@@ -44,10 +44,8 @@ kotlin {
             // Kotlin/Native 2.4.10 can exhaust the GitHub macOS runner heap in
             // DevirtualizationAnalysis while linking the large Release framework.
             // Disable that optimization phase; runtime availability and code generation remain intact.
-            appleTarget.compilations.configureEach { compilation ->
-                compilation.compilerOptions.freeCompilerArgs.add(
-                    "-Xdisable-phases=DevirtualizationAnalysis"
-                )
+            appleTarget.compilerOptions {
+                freeCompilerArgs.add("-Xdisable-phases=DevirtualizationAnalysis")
             }
 
             appleTarget.binaries.framework {
