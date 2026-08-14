@@ -5,6 +5,7 @@ import Combine
 import FlareAppleCore
 import FlareAppleUI
 
+@available(iOS 16.0, *)
 struct Router<Root: View>: View {
     @Environment(\.openURL) private var openURL
     @ViewBuilder let root: (@escaping (Route) -> Void) -> Root
@@ -42,27 +43,15 @@ struct Router<Root: View>: View {
         }
         .environment(\.timelineMediaActionHandler, IOSTimelineMediaActions.handler)
         .sheet(item: $sheet) { route in
-            if #available(iOS 18.0, *) {
-                NavigationStack {
-                    route.view(
-                        onNavigate: { route in navigate(route: route) },
-                        goBack: { backStack.removeLast() }
-                    )
-                }
-            } else {
-                NavigationStack {
-                    route.view(
-                        onNavigate: { route in navigate(route: route) },
-                        goBack: { backStack.removeLast() }
-                    )
-                    .navigationDestination(for: Route.self) { destination in
-                        destination.view(
-                            onNavigate: { route in navigate(route: route) },
-                            goBack: {}
-                        )
-                    }
-                }
-            }
+            // Do not place this availability check directly in the sheet's
+            // ViewBuilder. Swift 6 emits a buildLimitedAvailability warning for
+            // that pattern, and the generated conditional metadata is evaluated
+            // while SwiftUI builds the iOS 16/17 presentation graph.
+            SheetRouteContainer(
+                route: route,
+                onNavigate: { route in navigate(route: route) },
+                goBack: { backStack.removeLast() }
+            )
         }
         .fullScreenCover(item: $cover) { route in
             NavigationStack {
@@ -151,6 +140,69 @@ struct Router<Root: View>: View {
 class DeepLinkHandler : ObservableObject {
     var onRoute: ((Route) -> Void)?
     var onLink: ((String) -> Void)?
+}
+
+/// Erases the OS-specific sheet hierarchy before SwiftUI evaluates the
+/// `.sheet` closure. This preserves the iOS 17 nested-navigation workaround
+/// while preventing conditional-view metadata from entering the iOS 16 graph.
+@available(iOS 16.0, *)
+private struct SheetRouteContainer: View {
+    let route: Route
+    let onNavigate: (Route) -> Void
+    let goBack: () -> Void
+
+    var body: some View {
+        sheetContent(for: route)
+    }
+
+    private func sheetContent(for route: Route) -> AnyView {
+        if #available(iOS 18.0, *) {
+            return AnyView(
+                ModernSheetRoute(
+                    route: route,
+                    onNavigate: onNavigate,
+                    goBack: goBack
+                )
+            )
+        }
+
+        return AnyView(
+            LegacySheetRoute(
+                route: route,
+                onNavigate: onNavigate,
+                goBack: goBack
+            )
+        )
+    }
+}
+
+@available(iOS 18.0, *)
+private struct ModernSheetRoute: View {
+    let route: Route
+    let onNavigate: (Route) -> Void
+    let goBack: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            route.view(onNavigate: onNavigate, goBack: goBack)
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+private struct LegacySheetRoute: View {
+    let route: Route
+    let onNavigate: (Route) -> Void
+    let goBack: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            route.view(onNavigate: onNavigate, goBack: goBack)
+                .navigationDestination(for: Route.self) { destination in
+                    destination.view(onNavigate: onNavigate, goBack: {})
+                }
+        }
+    }
 }
 
 private extension URL {
