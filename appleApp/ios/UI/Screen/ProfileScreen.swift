@@ -72,9 +72,6 @@ var body: AnyView {
                         }
                     }
                 }
-                if #available(iOS 26.0, *) {
-                    ToolbarSpacer()
-                }
             } else if !shouldGateBlockedProfile && horizontalSizeClass == .compact, case .success(let tabState) = onEnum(of: presenter.state.tabs) {
                 let tabs = tabState.data.cast(ProfileState.Tab.self)
                 if tabs.count > 1 && showToolbarTabPicker {
