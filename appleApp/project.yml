@@ -77,7 +77,8 @@ packages:
     exactVersion: 0.62.2
   SwiftUI-Flow:
     url: https://github.com/tevelee/SwiftUI-Flow
-    exactVersion: 3.1.1
+    # 2.x+ requires iOS 16; 1.7.0 is the latest release supporting iOS 15.
+    exactVersion: 1.7.0
   swiftui-introspect:
     url: https://github.com/siteline/swiftui-introspect
     exactVersion: 27.0.0-beta.1
