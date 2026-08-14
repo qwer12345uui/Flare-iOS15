@@ -67,14 +67,23 @@ jobs:
         with:
           xcode-version: ${{ env.XCODE_VERSION }}
 
-      - name: Verify iOS platform
+      - name: Install iOS platform
         run: |
-          if xcodebuild -showsdks | grep -q 'iphoneos'; then
-            echo 'iPhoneOS SDK is already available on this runner.'
-          else
-            echo 'iPhoneOS SDK is missing; downloading the iOS platform.'
-            xcodebuild -downloadPlatform iOS
-          fi
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            echo "Installing iOS platform (attempt ${attempt}/3)."
+            if xcodebuild -downloadPlatform iOS; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo 'Unable to install the iOS platform after three attempts.' >&2
+              exit 1
+            fi
+            # Xcode 26 runners occasionally leave CoreSimulator unavailable after selection.
+            sudo killall -9 com.apple.CoreSimulator.CoreSimulatorService 2>/dev/null || true
+            sudo killall -9 SimulatorTrampoline 2>/dev/null || true
+            sleep 15
+          done
           xcodebuild -showsdks | grep 'iphoneos'
 
       - name: Install XcodeGen
