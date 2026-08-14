@@ -8,6 +8,12 @@ struct FlareApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        // iOS 15 uses a deliberately self-contained compatibility screen.  Do not
+        // initialize Kotlin/Native presenters, Firebase, media services, or the
+        // modern SwiftUI environment on that OS: several of those graphs require
+        // newer SwiftUI runtime behaviour and caused a launch-time recursion crash.
+        guard #available(iOS 16.0, *) else { return }
+
         MediaCacheMaintenance.configure()
         configureAudioSessionForMixing()
         let firebaseEnabled = FirebaseBootstrap.configureIfAvailable()
@@ -21,19 +27,25 @@ struct FlareApp: App {
             swiftOnDeviceAI: FoundationModelOnDeviceAI.shared
         )
     }
+
     var body: some Scene {
         WindowGroup {
-            FlareTheme {
-                if #available(iOS 18.0, *) {
-                    FlareRoot()
-                } else if #available(iOS 16.0, *) {
-                    BackportFlareRoot()
-                } else {
-                    IOS15FallbackRoot()
+            if #available(iOS 16.0, *) {
+                FlareTheme {
+                    if #available(iOS 18.0, *) {
+                        FlareRoot()
+                    } else {
+                        BackportFlareRoot()
+                    }
                 }
-            }
-            .onChangeCompat(of: scenePhase) { _, phase in
-                MediaCacheMaintenance.handleScenePhase(phase)
+                .onChangeCompat(of: scenePhase) { _, phase in
+                    MediaCacheMaintenance.handleScenePhase(phase)
+                }
+            } else {
+                // Keep this branch outside FlareTheme.  It must remain a plain
+                // SwiftUI tree so an iOS 15 launch never evaluates a modern
+                // environment key, KotlinPresenter, or navigation implementation.
+                IOS15FallbackRoot()
             }
         }
     }
