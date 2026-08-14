@@ -54,6 +54,7 @@ settings:
     SWIFT_VERSION: "6.3"
   configs:
     Release:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: IOS15_COMPAT_BUILD
       VALIDATE_PRODUCT: YES
 
 packages:

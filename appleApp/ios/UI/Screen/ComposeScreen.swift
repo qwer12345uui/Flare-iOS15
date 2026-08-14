@@ -54,7 +54,12 @@ struct ComposeScreen: View {
     @State private var showDraftConfirmation = false
     @State private var showAccountPicker = false
 
-    var body: AnyView {
+    #if IOS15_COMPAT_BUILD
+    var body: some View {
+        IOS15CompatibilityScreen(title: "Compose")
+    }
+#else
+var body: AnyView {
         AnyView(
         VStack(
             spacing: 8
@@ -246,6 +251,7 @@ struct ComposeScreen: View {
         }
 
         )}
+#endif
 
     private var composeActionBar: some View {
         ComposeActionBarContent(

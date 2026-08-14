@@ -65,7 +65,12 @@ struct MediaViewerScreen<SupplementaryOverlay: View>: View {
         self._protectInitialPagerSelection = .init(initialValue: initialIndex > 0)
     }
 
-    var body: AnyView {
+    #if IOS15_COMPAT_BUILD
+    var body: some View {
+        IOS15CompatibilityScreen(title: "Media viewer")
+    }
+#else
+var body: AnyView {
         AnyView(
         ZStack {
             if medias.isEmpty {
@@ -206,6 +211,7 @@ struct MediaViewerScreen<SupplementaryOverlay: View>: View {
         }
 
         )}
+#endif
 
     @ViewBuilder
     private func mediaContent(_ media: any UiMedia) -> some View {

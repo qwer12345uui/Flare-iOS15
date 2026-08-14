@@ -9,7 +9,12 @@ struct AccountManagementScreen: View {
     @State private var pendingLogoutAccountKey: MicroBlogKey? = nil
     @State private var pendingLogoutAccountName: String? = nil
 
-    var body: AnyView {
+    #if IOS15_COMPAT_BUILD
+    var body: some View {
+        IOS15CompatibilityScreen(title: "Account management")
+    }
+#else
+var body: AnyView {
         AnyView(
         List {
             ForEach(tabItems, id: \.account.accountKey) { account in
@@ -84,6 +89,7 @@ struct AccountManagementScreen: View {
         }
 
         )}
+#endif
 
     private func accountActions<Content: View>(
         for account: UiAccount,

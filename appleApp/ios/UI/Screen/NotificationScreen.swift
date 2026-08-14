@@ -76,7 +76,12 @@ struct NotificationScreen: View {
         }
     }
 
-    var body: AnyView {
+    #if IOS15_COMPAT_BUILD
+    var body: some View {
+        IOS15CompatibilityScreen(title: "Notifications")
+    }
+#else
+var body: AnyView {
         AnyView(
         UITimelinePagingView(
             data: presenter.state.timeline,
@@ -139,6 +144,7 @@ struct NotificationScreen: View {
             }
 
         )}
+#endif
 
     private func syncSelectedAccountFromPresenter() {
         if selectedAccountStableKey != presenterSelectedAccountStableKey {

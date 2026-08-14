@@ -22,7 +22,12 @@ struct ProfileScreen: View {
     @State private var showBlockedProfileContent = false
     @Environment(\.timelineAppearance.timelineDisplayMode) private var timelineDisplayMode
 
-    var body: AnyView {
+    #if IOS15_COMPAT_BUILD
+    var body: some View {
+        IOS15CompatibilityScreen(title: "Profile")
+    }
+#else
+var body: AnyView {
         AnyView(
         ZStack {
             if horizontalSizeClass == .regular {
@@ -98,6 +103,7 @@ struct ProfileScreen: View {
         }
 
         )}
+#endif
 
     var regularBody: some View {
         HStack(spacing: nil) {
