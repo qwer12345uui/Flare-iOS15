@@ -654,7 +654,7 @@ private struct AppearanceOverrideGroup<Content: View>: View {
                 .labelsHidden()
             }
         }
-        .onChange(of: overridesEnabled) { _, value in
+        .onChangeCompat(of: overridesEnabled) { _, value in
             withAnimation {
                 expanded = value
             }

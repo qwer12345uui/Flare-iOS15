@@ -47,7 +47,7 @@ public struct EditRssSheet: View {
                         .onSubmit {
                             presenter.state.checkUrl(value: url)
                         }
-                        .onChange(of: url) { _, newValue in
+                        .onChangeCompat(of: url) { _, newValue in
                             presenter.state.checkUrl(value: newValue)
                         }
 
@@ -128,7 +128,7 @@ public struct EditRssSheet: View {
                                 .onSubmit {
                                     presenter.state.checkRssHubServer(value: rssHubHost)
                                 }
-                                .onChange(of: rssHubHost) { _, newValue in
+                                .onChangeCompat(of: rssHubHost) { _, newValue in
                                     presenter.state.checkRssHubServer(value: newValue)
                                 }
 
@@ -189,7 +189,7 @@ public struct EditRssSheet: View {
             }
         }
         .rssFormStyle()
-        .onChange(of: presenter.state.checkState) { _, newValue in
+        .onChangeCompat(of: presenter.state.checkState) { _, newValue in
             selectedRssSources = []
             selectedMastodonTypes = []
             rssHubHost = ""
@@ -199,7 +199,7 @@ public struct EditRssSheet: View {
                 title = feed.title
             }
         }
-        .onChange(of: presenter.state.inputState) { _, newValue in
+        .onChangeCompat(of: presenter.state.inputState) { _, newValue in
             if case .success(let success) = onEnum(of: newValue),
                case .rssHub(let rssHubState) = onEnum(of: success.data),
                case .success(let checkSuccess) = onEnum(of: rssHubState.checkState),
@@ -208,7 +208,7 @@ public struct EditRssSheet: View {
                 title = feed.title
             }
         }
-        .onChange(of: presenter.state.data) { _, newValue in
+        .onChangeCompat(of: presenter.state.data) { _, newValue in
             if case .success(let success) = onEnum(of: newValue) {
                 title = success.data.title ?? ""
                 displayMode = success.data.displayMode

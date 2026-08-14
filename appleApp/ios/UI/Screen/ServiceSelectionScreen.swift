@@ -60,7 +60,7 @@ struct ServiceSelectionScreen: View {
         }
         .listStyle(.insetGrouped)
         .animation(ServiceSelectionAnimation.standard, value: serviceContentKey(state: presenter.state))
-        .onChange(of: instanceInput) { _, newValue in
+        .onChangeCompat(of: instanceInput) { _, newValue in
             presenter.state.setFilter(value: newValue)
         }
     }
@@ -565,7 +565,7 @@ private struct LoginFieldView: View {
         }
         .textFieldStyle(.roundedBorder)
         .disabled(field.readOnly)
-        .onChange(of: value) { _, newValue in
+        .onChangeCompat(of: value) { _, newValue in
             onUpdate(field.id, newValue)
         }
         .onSubmit {

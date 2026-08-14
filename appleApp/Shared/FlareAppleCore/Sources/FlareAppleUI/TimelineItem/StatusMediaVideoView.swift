@@ -113,23 +113,23 @@ public struct VideoControlView: View {
             baselineSeconds = seconds
             baselineDate = Date()
         }
-        .onChange(of: currentTime.seconds) { _, newValue in
+        .onChangeCompat(of: currentTime.seconds) { _, newValue in
             guard !isSeeking, newValue.isFinite else { return }
             baselineSeconds = newValue
             baselineDate = Date()
             sliderValue = newValue
         }
-        .onChange(of: isPlaying) { _, playing in
+        .onChangeCompat(of: isPlaying) { _, playing in
             if playing {
                 baselineSeconds = sliderValue
                 baselineDate = Date()
             }
         }
-        .onChange(of: playbackRate) { _, _ in
+        .onChangeCompat(of: playbackRate) { _, _ in
             baselineSeconds = sliderValue
             baselineDate = Date()
         }
-        .onChange(of: duration) { _, newValue in
+        .onChangeCompat(of: duration) { _, newValue in
             if sliderValue > newValue {
                 sliderValue = newValue
             }
@@ -338,16 +338,16 @@ public struct StatusMediaVideoView: View {
                 configureMacPlayerIfNeeded()
                 updateMacPlayback()
             }
-            .onChange(of: play) { _, _ in
+            .onChangeCompat(of: play) { _, _ in
                 updateMacPlayback()
             }
-            .onChange(of: playbackRate) { _, _ in
+            .onChangeCompat(of: playbackRate) { _, _ in
                 updateMacPlayback()
             }
-            .onChange(of: time) { _, newValue in
+            .onChangeCompat(of: time) { _, newValue in
                 seekMacPlayerIfNeeded(to: newValue)
             }
-            .onChange(of: data.url) { _, _ in
+            .onChangeCompat(of: data.url) { _, _ in
                 configureMacPlayerIfNeeded()
                 updateMacPlayback()
             }

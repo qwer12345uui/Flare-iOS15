@@ -22,7 +22,7 @@ struct TabSettingsScreen: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    .onChange(of: enableMixedTimeline) { _, value in
+                    .onChangeCompat(of: enableMixedTimeline) { _, value in
                         tabItems = withSystemHomeMixedTimelineEnabled(tabItems, enabled: value)
                     }
                     if enableMixedTimeline {

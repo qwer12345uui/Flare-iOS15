@@ -1,5 +1,6 @@
 import SwiftUI
 import Kingfisher
+import FlareAppleCore
 
 public struct NetworkImage: View {
     private let data: URL?
@@ -171,7 +172,7 @@ private struct CrossfadeNetworkImage: View {
         .onAppear {
             resetLoadingStateIfNeeded()
         }
-        .onChange(of: data) { _, _ in
+        .onChangeCompat(of: data) { _, _ in
             resetLoadingStateIfNeeded()
         }
         .onDisappear {

@@ -30,7 +30,7 @@ struct FlareApp: App {
                     BackportFlareRoot()
                 }
             }
-            .onChange(of: scenePhase) { _, phase in
+            .onChangeCompat(of: scenePhase) { _, phase in
                 MediaCacheMaintenance.handleScenePhase(phase)
             }
         }

@@ -36,7 +36,7 @@ struct ProfileScreen: View {
             horizontalSizeClass == .compact && isProfileHeaderVisible ? Visibility.hidden : Visibility.automatic,
             for: .navigationBar
         )
-        .onChange(of: isBlockedProfile) { _, isBlocked in
+        .onChangeCompat(of: isBlockedProfile) { _, isBlocked in
             if !isBlocked {
                 showBlockedProfileContent = false
             }

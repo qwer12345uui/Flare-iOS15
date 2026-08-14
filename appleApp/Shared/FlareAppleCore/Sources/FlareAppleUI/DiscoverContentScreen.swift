@@ -98,7 +98,7 @@ public struct DiscoverContentScreen<AskAiOverlay: View>: View {
                 }
             }
         }
-        .onChange(of: presenter.state.selectedAccount) { _, newAccount in
+        .onChangeCompat(of: presenter.state.selectedAccount) { _, newAccount in
             if let newAccount {
                 searchPresenter.state.setAccount(profile: newAccount)
             }

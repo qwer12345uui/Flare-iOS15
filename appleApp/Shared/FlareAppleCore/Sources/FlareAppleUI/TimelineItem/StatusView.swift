@@ -407,16 +407,16 @@ public struct StatusView: View {
                 data.onClicked(ClickContext(launcher: AppleUriLauncher(openUrl: openURL)))
             }
         }
-        .onChange(of: data.renderHash) { _, _ in
+        .onChangeCompat(of: data.renderHash) { _, _ in
             contentWarningExpanded = false
             textExpanded = false
             overflowingTextIndexes.removeAll()
         }
-        .onChange(of: effectiveLineLimit) { _, _ in
+        .onChangeCompat(of: effectiveLineLimit) { _, _ in
             textExpanded = false
             overflowingTextIndexes.removeAll()
         }
-        .onChange(of: translateConfig.showOriginalWithTranslation) { _, _ in
+        .onChangeCompat(of: translateConfig.showOriginalWithTranslation) { _, _ in
             textExpanded = false
             overflowingTextIndexes.removeAll()
         }
@@ -528,13 +528,13 @@ private struct CollapsibleRichText: View {
                 lineHeight = value
                 publishOverflow(fullHeight: fullHeight, lineHeight: value)
             }
-            .onChange(of: lineLimit) { _, _ in
+            .onChangeCompat(of: lineLimit) { _, _ in
                 publishOverflow(fullHeight: fullHeight, lineHeight: lineHeight)
             }
-            .onChange(of: isExpanded) { _, _ in
+            .onChangeCompat(of: isExpanded) { _, _ in
                 publishOverflow(fullHeight: fullHeight, lineHeight: lineHeight)
             }
-            .onChange(of: text.raw) { _, _ in
+            .onChangeCompat(of: text.raw) { _, _ in
                 fullHeight = 0
                 onOverflowChanged(false)
             }

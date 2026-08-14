@@ -141,7 +141,7 @@ struct ComposeScreen: View {
         .onAppear {
             applyPrefillIfNeeded()
         }
-        .onChange(of: presenter.state.initialTextState) { _, newValue in
+        .onChangeCompat(of: presenter.state.initialTextState) { _, newValue in
             guard !initialTextApplied else { return }
             if case .success(let initialText) = onEnum(of: newValue) {
                 initialTextApplied = true
@@ -159,7 +159,7 @@ struct ComposeScreen: View {
                 mediaViewModel.altTextMaxLength = Int(media.altTextMaxLength)
             }
         }
-        .onChange(of: presenter.state.loadedDraftState) { _, newValue in
+        .onChangeCompat(of: presenter.state.loadedDraftState) { _, newValue in
             guard let newValue, case .success(let loadedDraft) = onEnum(of: newValue) else { return }
             applyDraft(loadedDraft.data)
             presenter.state.consumeLoadedDraft()
@@ -167,12 +167,12 @@ struct ComposeScreen: View {
         .onChange(of: viewModel.text) { oldValue, newValue in
             presenter.state.setText(value: newValue)
         }
-        .onChange(of: keyboardFocused) { _, isFocused in
+        .onChangeCompat(of: keyboardFocused) { _, isFocused in
             if isFocused {
                 applyCursorIfPossible()
             }
         }
-        .onChange(of: mediaViewModel.items.count) { _, newValue in
+        .onChangeCompat(of: mediaViewModel.items.count) { _, newValue in
             presenter.state.setMediaSize(value: Int32(newValue))
         }
         .sheet(isPresented: $showDraftSheet) {

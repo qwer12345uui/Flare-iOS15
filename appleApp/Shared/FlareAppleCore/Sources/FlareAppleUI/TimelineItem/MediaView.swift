@@ -117,7 +117,7 @@ public struct MediaVideoView: View {
                     }
                 }
                 .contentMode(.scaleAspectFill)
-                .onChange(of: effectiveIsScrolling) { _, newValue in
+                .onChangeCompat(of: effectiveIsScrolling) { _, newValue in
                     if !newValue, !play, isAppeared, canPlay() {
                         play = true
                     }
@@ -162,13 +162,13 @@ public struct MediaVideoView: View {
                 configureMacPlayerIfNeeded()
                 updateMacPlayback()
             }
-            .onChange(of: effectiveIsScrolling) { _, _ in
+            .onChangeCompat(of: effectiveIsScrolling) { _, _ in
                 updateMacPlayback()
             }
-            .onChange(of: networkKind) { _, _ in
+            .onChangeCompat(of: networkKind) { _, _ in
                 updateMacPlayback()
             }
-            .onChange(of: data.url) { _, _ in
+            .onChangeCompat(of: data.url) { _, _ in
                 configureMacPlayerIfNeeded()
                 updateMacPlayback()
             }

@@ -1,4 +1,5 @@
 import SwiftUI
+import FlareAppleCore
 
 private struct IsScrollingKey: EnvironmentKey {
     static let defaultValue = false
@@ -46,7 +47,7 @@ private struct DetectScrollingModifier: ViewModifier {
                 .onScrollPhaseChange { _, phase in
                     rawIsScrolling = (phase != .idle)
                 }
-                .onChange(of: rawIsScrolling) { _, newValue in
+                .onChangeCompat(of: rawIsScrolling) { _, newValue in
                     if newValue {
                         debounceTask?.cancel()
                         isScrolling = true

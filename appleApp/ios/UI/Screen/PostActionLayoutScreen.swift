@@ -43,7 +43,7 @@ struct PostActionLayoutScreen: View {
         .onAppear {
             config = normalizedTimelineConfig
         }
-        .onChange(of: persistedSignature) { _, _ in
+        .onChangeCompat(of: persistedSignature) { _, _ in
             config = normalizedTimelineConfig
         }
     }

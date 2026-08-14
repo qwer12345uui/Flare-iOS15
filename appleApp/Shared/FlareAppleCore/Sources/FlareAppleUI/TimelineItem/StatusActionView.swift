@@ -655,7 +655,7 @@ public struct MacStatusShareSheet: View {
             .onAppear {
                 renderScreenshot(data: state)
             }
-            .onChange(of: theme) { _, _ in
+            .onChangeCompat(of: theme) { _, _ in
                 renderScreenshot(data: state)
             }
         } errorContent: { error in
