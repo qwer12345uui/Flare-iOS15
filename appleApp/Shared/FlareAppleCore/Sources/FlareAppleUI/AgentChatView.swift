@@ -1,6 +1,7 @@
 import FlareAppleCore
 import KotlinSharedUI
 import SwiftUI
+import SwiftUIBackports
 
 public struct AgentChatView: View {
     let messages: PagingState<AgentChatHistoryMessage>
