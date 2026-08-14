@@ -26,8 +26,10 @@ struct FlareApp: App {
             FlareTheme {
                 if #available(iOS 18.0, *) {
                     FlareRoot()
-                } else {
+                } else if #available(iOS 16.0, *) {
                     BackportFlareRoot()
+                } else {
+                    IOS15FallbackRoot()
                 }
             }
             .onChangeCompat(of: scenePhase) { _, phase in
@@ -38,6 +40,27 @@ struct FlareApp: App {
     
     func configureAudioSessionForMixing() {
         AudioSessionManager.shared.activateAmbient()
+    }
+}
+
+/// Startup-safe fallback for iOS 15. The modern SwiftUI navigation stack and
+/// its route implementations are intentionally not instantiated on this OS.
+private struct IOS15FallbackRoot: View {
+    var body: some View {
+        VStack(spacing: 18) {
+            Image(systemName: "flame")
+                .font(.system(size: 42, weight: .semibold))
+                .foregroundColor(.accentColor)
+            Text("Flare")
+                .font(.title2.weight(.semibold))
+            Text("The iOS 15 compatibility mode is active. Update to iOS 16 or later for the full navigation experience.")
+                .font(.body)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 28)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
     }
 }
 
