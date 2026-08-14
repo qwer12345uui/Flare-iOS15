@@ -49,7 +49,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}-${{ github.sha }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}-
             ${{ runner.os }}-gradle-
@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.konan/dependencies
-          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}-${{ github.sha }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-konan-${{ hashFiles('**/*.gradle*', 'gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}-
             ${{ runner.os }}-konan-
@@ -115,7 +115,7 @@ jobs:
           path: |
             ~/Library/Developer/Xcode/DerivedData/Flare-*/SourcePackages
             ~/Library/Caches/org.swift.swiftpm
-          key: ${{ runner.os }}-xcode-${{ env.XCODE_VERSION }}-spm-${{ hashFiles('appleApp/project.yml', 'appleApp/**/Package.resolved') }}-${{ github.sha }}
+          key: ${{ runner.os }}-xcode-${{ env.XCODE_VERSION }}-spm-${{ hashFiles('appleApp/project.yml', 'appleApp/**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-xcode-${{ env.XCODE_VERSION }}-spm-${{ hashFiles('appleApp/project.yml', 'appleApp/**/Package.resolved') }}-
             ${{ runner.os }}-xcode-${{ env.XCODE_VERSION }}-spm-
