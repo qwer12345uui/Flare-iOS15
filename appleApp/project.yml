@@ -44,7 +44,7 @@ settings:
     SWIFT_EMIT_LOC_STRINGS: YES
     # High-version UI is isolated behind the runtime iOS 15 fallback root.
     # Keep those sources buildable with the modern SDK while old devices never execute them.
-    OTHER_SWIFT_FLAGS: "$(inherited) -Xfrontend -disable-availability-checking -Xfrontend -solver-expression-time-threshold=10000"
+    OTHER_SWIFT_FLAGS: "$(inherited) -Xfrontend -disable-availability-checking -Xfrontend -solver-expression-time-threshold -Xfrontend 60000"
     SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY: YES
     SWIFT_VERSION: "6.3"
   configs:
