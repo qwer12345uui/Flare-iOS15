@@ -54,7 +54,8 @@ struct ComposeScreen: View {
     @State private var showDraftConfirmation = false
     @State private var showAccountPicker = false
 
-    var body: some View {
+    var body: AnyView {
+        AnyView(
         VStack(
             spacing: 8
         ) {
@@ -73,7 +74,7 @@ struct ComposeScreen: View {
                         .focused($cwKeyboardFocused)
                         Divider()
                     }
-                    
+
                     TextEditor(text: $viewModel.text)
                         .font(.body)
                         .scrollContentBackground(.hidden)
@@ -136,7 +137,7 @@ struct ComposeScreen: View {
                     .glassEffect(.regular, in: .capsule, fallbackBackground: .regularMaterial)
                     .padding()
             }
-            
+
         }
         .onAppear {
             applyPrefillIfNeeded()
@@ -243,7 +244,8 @@ struct ComposeScreen: View {
                 .disabled(!presenter.state.canSend)
             }
         }
-    }
+
+        )}
 
     private var composeActionBar: some View {
         ComposeActionBarContent(
@@ -434,7 +436,7 @@ struct ComposeScreen: View {
             accountAvatar(user: user, size: 24)
         }
     }
-    
+
     private func applyCursorIfPossible() {
         guard uiTextView != nil, pendingCursor != nil else { return }
         DispatchQueue.main.async {
@@ -478,7 +480,7 @@ struct ComposeScreen: View {
             applyCursorIfPossible()
         }
     }
-    
+
     private func insert(_ s: String) {
         guard let textView = uiTextView else { return }
 
@@ -496,7 +498,7 @@ struct ComposeScreen: View {
         textView.selectedRange = NSRange(location: newLocation, length: 0)
         textView.scrollRangeToVisible(NSRange(location: max(0, newLocation - 1), length: 1))
     }
-    
+
     private func getComposeData() -> ComposeData {
         viewModel.makeComposeData(
             visibility: getVisibility(),
@@ -510,7 +512,7 @@ struct ComposeScreen: View {
         viewModel.hasDraftContent ||
         !mediaViewModel.items.isEmpty
     }
-    
+
     private func send() {
         let data = getComposeData()
         presenter.state.send(data: data) { dispatched in
@@ -536,7 +538,7 @@ struct ComposeScreen: View {
         setVisibility(result.visibility)
         requestComposerFocus()
     }
-    
+
     private func getMedia() -> [ComposeData.Media] {
         return mediaViewModel.items.compactMap { item in
             guard let data = item.data else {
@@ -651,12 +653,12 @@ class MediaItem: Equatable, Identifiable {
     let id: String
     let fileName: String
     var type: FileType = .other
-    
+
     init(item: PhotosPickerItem) {
         self.item = item
         self.id = item.itemIdentifier ?? UUID().uuidString
         self.fileName = item.itemIdentifier ?? UUID().uuidString
-        
+
         if let contentType = item.supportedContentTypes.first {
             if contentType.conforms(to: .image) {
                 self.type = .image
@@ -664,7 +666,7 @@ class MediaItem: Equatable, Identifiable {
                 self.type = .video
             }
         }
-        
+
         item.loadTransferable(type: Data.self) { result in
             do {
                 if let data = try result.get() {
@@ -776,7 +778,7 @@ struct ComposeMediaItemView: View {
     let item: MediaItem
     var mediaViewModel: MediaViewModel
     @State private var showAltTextEditor = false
-    
+
     var body: some View {
         if let image = item.image {
             Image(uiImage: image)
@@ -814,7 +816,7 @@ struct ComposeMediaItemView: View {
                             Image(fontAwesome: .trash)
                         }
                     })
-                    
+
                     if mediaViewModel.enableAltText {
                         Button {
                             showAltTextEditor = true

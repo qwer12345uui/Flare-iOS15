@@ -21,8 +21,9 @@ struct ProfileScreen: View {
     @State private var isInlineTabPickerVisible = true
     @State private var showBlockedProfileContent = false
     @Environment(\.timelineAppearance.timelineDisplayMode) private var timelineDisplayMode
-    
-    var body: some View {
+
+    var body: AnyView {
+        AnyView(
         ZStack {
             if horizontalSizeClass == .regular {
                 regularBody
@@ -47,7 +48,7 @@ struct ProfileScreen: View {
                     RichText(text: userState.data.name)
                 }
             }
-            
+
             if !shouldGateBlockedProfile && horizontalSizeClass == .regular, case .success(let tabState) = onEnum(of: presenter.state.tabs) {
                 let tabs = tabState.data.cast(ProfileState.Tab.self)
                 if tabs.count > 1 {
@@ -95,8 +96,9 @@ struct ProfileScreen: View {
                 }
             }
         }
-    }
-    
+
+        )}
+
     var regularBody: some View {
         HStack(spacing: nil) {
             ScrollView {
@@ -135,7 +137,7 @@ struct ProfileScreen: View {
             }
         }
     }
-    
+
     @ViewBuilder
     var compatBody: some View {
         if shouldGateBlockedProfile {
@@ -704,7 +706,7 @@ struct ProfileWithUserNameAndHostScreen: View {
     let onFollowingClick: (MicroBlogKey) -> Void
     let onFansClick: (MicroBlogKey) -> Void
     let onProfileInsight: (MicroBlogKey) -> Void
-    
+
     init(
         userName: String,
         host: String,
@@ -736,11 +738,11 @@ struct ProfileWithUserNameAndHostScreen: View {
 
 struct ProfileTimelineView: View {
     @StateObject private var presenter: KotlinPresenter<TimelineState>
-    
+
     init(presenter: TimelinePresenter) {
         self._presenter = .init(wrappedValue: .init(presenter: presenter))
     }
-    
+
     var body: some View {
         TimelinePagingListContent(data: presenter.state.listState)
 //            .refreshable {
@@ -751,11 +753,11 @@ struct ProfileTimelineView: View {
 
 struct ProfileTimelineWaterFallView: View {
     @StateObject private var presenter: KotlinPresenter<TimelineState>
-    
+
     init(presenter: TimelinePresenter) {
         self._presenter = .init(wrappedValue: .init(presenter: presenter))
     }
-    
+
     var body: some View {
         UITimelinePagingView(
             data: presenter.state.listState,

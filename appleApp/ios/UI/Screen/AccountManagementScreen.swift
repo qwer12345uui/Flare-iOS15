@@ -9,7 +9,8 @@ struct AccountManagementScreen: View {
     @State private var pendingLogoutAccountKey: MicroBlogKey? = nil
     @State private var pendingLogoutAccountName: String? = nil
 
-    var body: some View {
+    var body: AnyView {
+        AnyView(
         List {
             ForEach(tabItems, id: \.account.accountKey) { account in
                 StateView(state: account.profile) { user in
@@ -81,7 +82,8 @@ struct AccountManagementScreen: View {
                 }
             }
         }
-    }
+
+        )}
 
     private func accountActions<Content: View>(
         for account: UiAccount,

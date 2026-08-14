@@ -76,7 +76,8 @@ struct NotificationScreen: View {
         }
     }
 
-    var body: some View {
+    var body: AnyView {
+        AnyView(
         UITimelinePagingView(
             data: presenter.state.timeline,
             detailStatusKey: nil,
@@ -136,7 +137,8 @@ struct NotificationScreen: View {
             .onChange(of: selectedFilter?.stableKey) { _ in
                 syncSelectedFilterToPresenter()
             }
-    }
+
+        )}
 
     private func syncSelectedAccountFromPresenter() {
         if selectedAccountStableKey != presenterSelectedAccountStableKey {

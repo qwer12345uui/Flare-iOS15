@@ -65,7 +65,8 @@ struct MediaViewerScreen<SupplementaryOverlay: View>: View {
         self._protectInitialPagerSelection = .init(initialValue: initialIndex > 0)
     }
 
-    var body: some View {
+    var body: AnyView {
+        AnyView(
         ZStack {
             if medias.isEmpty {
                 if let preview {
@@ -203,7 +204,8 @@ struct MediaViewerScreen<SupplementaryOverlay: View>: View {
                 }
             }
         }
-    }
+
+        )}
 
     @ViewBuilder
     private func mediaContent(_ media: any UiMedia) -> some View {
